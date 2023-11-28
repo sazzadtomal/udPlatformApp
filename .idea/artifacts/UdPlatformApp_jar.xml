@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="UdPlatformApp:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/UdPlatformApp_jar</output-path>
+    <root id="archive" name="UdPlatformApp.jar">
+      <element id="module-output" name="UdPlatformApp" />
+    </root>
+  </artifact>
+</component>
