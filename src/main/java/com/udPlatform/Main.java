@@ -1,5 +1,4 @@
 package com.udPlatform;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -12,7 +11,7 @@ public class Main {
         String[] listOfUpdatableChildren={"FirstName","LastName"};
         ListOfParents parentsList;
 
-        System.out.println("Welcome! Let's get started!\n");
+        System.out.println("\nWelcome! Let's get started!");
         parentsList=FileOperation.readFromFile();
 
 
@@ -20,6 +19,7 @@ public class Main {
 
 
         while(true) {
+            System.out.println("You need to terminate to save any changes!\n");
             Utility.listOfSelection("Select a CRUD operation to Perform!", listOfOperations);
             String selectedOperation = listOfOperations[Utility.getSelection(sc, listOfOperations.length)];
 
@@ -80,6 +80,7 @@ public class Main {
 
                             if(selectedUpdate.equals("Address")){
                                 status.setAddress(Parent.getAddress(sc));
+                                break;
                             }
 
                             String update = Utility.inputString("Updated Value", sc);

@@ -23,7 +23,7 @@ public class ListOfParents implements Serializable {
             out+=parent.toString()+"\n";
         }
 
-        return String.format("[\n %s \n]",out);
+        return String.format("[\n %s \n]\n",out);
     }
     }
 
