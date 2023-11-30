@@ -16,7 +16,7 @@ public class ParentTest extends TestCase {
          Parent.addParent(parentsList,parentName,null,new Address("street","city","state",1204));
          assertEquals(1,parentsList.getList().size());
     }
-
+    @Test
     public void testAddDuplicateParentFailed(){
 
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
@@ -68,7 +68,7 @@ public class ParentTest extends TestCase {
 
         assertNotNull(Parent.searchChild(childName,searchedParent.getChildrenList()));
     }
-
+    @Test
     public void testChildExistFail(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -94,7 +94,7 @@ public class ParentTest extends TestCase {
         String updatedFirstName=parentsList.getList().get(0).getFName();
         assertEquals("NewFirstName",updatedFirstName);
     }
-
+    @Test
     public void testUpdateParentLastNameSuccess(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -106,7 +106,7 @@ public class ParentTest extends TestCase {
         String updatedLastName=parentsList.getList().get(0).getLName();
         assertEquals("NewLastName",updatedLastName);
     }
-
+    @Test
     public void testUpdateParentWithDuplicateNameUsingFirstNameFail(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -118,7 +118,7 @@ public class ParentTest extends TestCase {
         Parent parentForCheck=Parent.searchParent(parentName2,parentsList);
         assertFalse(Parent.updateParentName("FirstName","FirstName",parentForCheck,parentsList));
     }
-
+    @Test
     public void testUpdateParentWithDuplicateNameUsingLastNameFail(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -131,7 +131,7 @@ public class ParentTest extends TestCase {
         assertFalse(Parent.updateParentName("LastName","LastName",parentForCheck,parentsList));
     }
 
-
+    @Test
     public void testDeleteParentSuccess(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -140,7 +140,7 @@ public class ParentTest extends TestCase {
         Parent.deleteParent(Parent.searchParent(parentName,parentsList),parentsList);
         assertTrue(parentsList.getList().isEmpty());
     }
-
+    @Test
     public void testDeleteParentFail(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -152,7 +152,7 @@ public class ParentTest extends TestCase {
         assertFalse(parentsList.getList().isEmpty());
     }
 
-
+    @Test
     public void testCreateChildSuccess(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -165,7 +165,7 @@ public class ParentTest extends TestCase {
 
         assertEquals(1,parent.getChildrenList().size());
     }
-
+    @Test
     public void testCreateChildWithSameNameFails(){
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
@@ -178,7 +178,7 @@ public class ParentTest extends TestCase {
         assertEquals(1,parent.getChildrenList().size());
     }
 
-
+    @Test
     public void testUpdateChildWithFirstNameSuccess(){
 
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
@@ -199,7 +199,7 @@ public class ParentTest extends TestCase {
         assertNotNull(Parent.searchChild(updatedChildName,parent.getChildrenList()));
     }
 
-
+    @Test
     public void testUpdateChildRemoveDuplicateWithFirstName(){
 
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
@@ -217,7 +217,7 @@ public class ParentTest extends TestCase {
 
         assertFalse(Parent.updateChild("FirstName","ChildFirstName",child,parent));
     }
-
+    @Test
     public void testUpdateChildRemoveDuplicateWithLastName(){
 
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
@@ -235,7 +235,7 @@ public class ParentTest extends TestCase {
 
         assertFalse(Parent.updateChild("LastName","ChildLastName",child,parent));
     }
-
+    @Test
     public void testUpdateChildWithLastNameSuccess(){
 
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
@@ -256,7 +256,7 @@ public class ParentTest extends TestCase {
         assertNotNull(Parent.searchChild(updatedChildName,parent.getChildrenList()));
     }
 
-
+    @Test
     public void testDeleteChildSuccess(){
 
         ListOfParents parentsList=new ListOfParents(new ArrayList<Parent>());
