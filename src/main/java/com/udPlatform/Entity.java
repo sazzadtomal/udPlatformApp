@@ -6,10 +6,6 @@ public class Entity implements Serializable{
     private String FName;
     private String LName;
 
-    public Entity(){
-
-    }
-
     public Entity(String FName, String LName) {
         this.FName = FName;
         this.LName = LName;

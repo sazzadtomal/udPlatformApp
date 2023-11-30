@@ -1,14 +1,10 @@
 package com.udPlatform;
 
 import java.io.Serializable;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Utility implements Serializable {
 
-    public static void promptStartUp(){
-        System.out.println("Welcome! Let's get started!\n");
-    }
 
     public static void listOfSelection(String message,String[] operations){
         System.out.println(message);
@@ -20,9 +16,15 @@ public class Utility implements Serializable {
 
     public static String inputString(String tag, Scanner sc ){
         System.out.println("Input "+tag);
-        String input=sc.nextLine().trim();
+        String input;
+        while (true){
+            input=sc.nextLine();
+            if(input.isBlank()){
+                System.out.println("Please enter some value");
+            }else break;
+        }
         System.out.println("You have entered "+input+" as "+tag+".");
-        return input;
+        return input.trim();
     }
 
     public static int inputInt(String tag, Scanner sc ){
@@ -35,32 +37,6 @@ public class Utility implements Serializable {
             }
         }
     }
-
-
-//    public static int getSelection(Scanner sc,int max){
-//        System.out.println("Choose a selection-");
-//        String input;
-//        int selection;
-//
-//        while(true){
-//            input=sc.nextLine().trim();
-//            try{
-//                selection=Integer.parseInt(input);
-//                if(selection<0 || selection>=max){
-//                    System.out.println("Please choose a valid number!");
-//                    continue;
-//                }
-//                System.out.println("You have Selected "+selection+"\n");
-//                break;
-//            }catch (NumberFormatException e){
-//                System.out.println("Your input is not a Number- \"PLEASE TRY AGAIN\"");
-//            }
-//        }
-//
-//
-//        return selection;
-//    }
-
 
 
     public static int getSelection(Scanner sc,int max){
@@ -83,8 +59,6 @@ public class Utility implements Serializable {
         }
     }
 
-
-
     public static boolean getValidInt(String number){
         try {
             Integer.parseInt(number);
@@ -93,10 +67,6 @@ public class Utility implements Serializable {
             System.out.println("Your input is not a Number- \"PLEASE TRY AGAIN\"");
         }
         return false;
-    }
-
-    public static void success(){
-        System.out.println("Operation Successful");
     }
 
 

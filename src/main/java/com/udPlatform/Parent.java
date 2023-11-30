@@ -5,197 +5,296 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Parent extends Entity implements Serializable {
-
-
     private Address address;
-    private ArrayList<Child> listOfChildrens;
+    private ArrayList<Child> listOfChildren;
 
-    public Parent() {
-        super();
-    }
-
-    public Parent(String fName, String lName, Address address) {
+    private Parent(String fName, String lName, Address address) {
         super(fName,lName);
         this.address=address;
     }
 
 
-    public static void createParent(ListOfParents parentsList,Scanner sc){
-        Parent createdParent=Parent.addParentInfo(sc);
-        Parent status=Parent.parentExist(createdParent.getFName().toLowerCase(), createdParent.getLName().toLowerCase(), parentsList);
+
+
+
+    //Parents Operation
+    public static Parent searchParent(String[] parentName, ListOfParents parentsList){
+        return parentsList.getList().stream().filter(fName -> fName.getFName().equalsIgnoreCase(parentName[0])).filter(lName-> lName.getLName().equalsIgnoreCase(parentName[1])).findAny().orElse(null);
+    }
+
+
+    public static void addParent(ListOfParents parentsList,String [] parentName,Parent status,Address address){
         if(status==null){
-            parentsList.getList().add(createdParent);
+            parentsList.getList().add(new Parent(parentName[0],parentName[1],address));
         }else{
             System.out.println("Entered Parent already exists");
         }
     }
 
 
-    public static Parent addParentInfo(Scanner sc){
-        String firstName = Utility.inputString("First Name", sc);
-        String lastName = Utility.inputString("Last Name", sc);
-        Address address=addAddressInfo(sc);
-        Parent parent = new Parent(firstName, lastName, address);
-        return parent;
+    public static boolean updateParentName(String updateValue, String updateType, Parent parent, ListOfParents parentsList){
+        if (updateType.equals("FirstName")) {
+            return updateFirstNameParent(updateValue,parent,parentsList);
+        }
+        return updateLastNameParent(updateValue,parent,parentsList);
     }
 
-    public static Address addAddressInfo(Scanner sc){
+
+    public static boolean updateFirstNameParent(String firstName, Entity entity, ListOfParents parentsList){
+        String [] parentName={firstName,entity.getLName()};
+        Parent check=Parent.searchParent(parentName,parentsList);
+        if(check==null) {
+            entity.setFName(firstName);
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean updateLastNameParent(String lastName, Entity parent, ListOfParents parentsList){
+        String [] parentName={parent.getFName(),lastName};
+        Parent check=Parent.searchParent(parentName,parentsList);
+        if(check==null) {
+            parent.setLName(lastName);
+            return true;
+        }
+        return false;
+    }
+
+    public static void deleteParent(Parent parent,ListOfParents parentsList){
+        parentsList.getList().remove(parent);
+    }
+
+
+
+
+
+
+    //Children Operations
+
+    public static Entity searchChild(String[] childName, ArrayList<Child> listOfChildren){
+        if(listOfChildren==null) return null;
+        return listOfChildren.stream().filter(fName -> fName.getFName().equalsIgnoreCase(childName[0])).filter(lName-> lName.getLName().equalsIgnoreCase(childName[1])).findAny().orElse(null);
+    }
+
+
+    public static void createChild( Parent searchedParent,String[] childName){
+            if(searchedParent==null) return;
+
+            System.out.println("Success");
+            Entity status=Parent.searchChild(childName,searchedParent.getChildrenList());
+            if(status==null){
+                searchedParent.addChild(childName);
+                System.out.println("Operation Successful");
+            }else{
+                System.out.println("Entered Child already exists");
+            }
+    }
+
+    public void addChild(String[] childName){
+        if(listOfChildren==null){
+            listOfChildren = new ArrayList<>();
+
+        }
+        listOfChildren.add(new Child(childName[0],childName[1]));
+    }
+
+
+    public static boolean updateChild(String updateType,String updateValue,Entity childExist,Parent parent){
+        if (updateType.equals("FirstName")) {
+            String[] checkChild={updateValue,childExist.getLName()};
+            Entity check=Parent.searchChild(checkChild,parent.getChildrenList());
+            if(check==null){
+                childExist.setFName(updateValue);
+                return true;
+            }
+
+        }
+        else {
+            String [] checkName={childExist.getFName(),updateValue};
+            Entity check=Parent.searchChild(checkName,parent.getChildrenList());
+            if(check==null){
+                childExist.setLName(updateValue);
+                return true;
+            }
+        }
+        parent.getChildrenList().remove(childExist);
+        return false;
+
+    }
+
+
+    public static void deleteChild(Parent parent,Entity child){
+        parent.getChildrenList().remove(child);
+    }
+
+
+
+
+
+    //Getting data from the User
+    public static String[] getParentInfo(Scanner sc){
+        String[] name=new String[2];
+        name[0]= Utility.inputString("First Name of Parent", sc);
+        name[1] = Utility.inputString("Last Name of Parent", sc);
+        return name;
+    }
+
+
+
+    public static Address getAddress(Scanner sc){
         String street = Utility.inputString("Street", sc);
         String city = Utility.inputString("City", sc);
         String state = Utility.inputString("State", sc);
         int zipCode = Utility.inputInt("Zip", sc);
-        Address address = new Address(street, city, state, zipCode);
-        return address;
+
+        return new Address(street, city, state, zipCode);
     }
 
-    public static Parent searchParent(ListOfParents parentsList, Scanner sc){
-        String[] name=getParentInfo(sc);
-        String firstName = name[0];
-        String lastName =name[1];
-        return parentExist(firstName,lastName,parentsList);
-    }
-
-    public static String[] getParentInfo(Scanner sc){
-        String[] name=new String[2];
-        name[0]= Utility.inputString("First Name of Parent", sc).toLowerCase();
-        name[1] = Utility.inputString("Last Name of Parent", sc).toLowerCase();
-        return name;
-    }
-
-
-
-
-    public static Parent parentExist(String firstName,String lastName,ListOfParents parentsList){
-        Parent tempParent1 = parentsList.getList().stream().filter(fName -> fName.getFName().toLowerCase().equals(firstName)).findAny().orElse(null);
-        Parent tempParent2= parentsList.getList().stream().filter(LName -> LName.getLName().toLowerCase().equals(lastName)).findAny().orElse(null);
-
-        if(tempParent1==null){
-            return null;
-        }
-
-        if(tempParent1.equals(tempParent2)){
-            return tempParent1;
-        }
-
-        return null;
-
-    }
-
-
-    public static void createChild(ListOfParents parentsList, Scanner sc){
-        System.out.println("You have to select a parent to add a Child!\n");
-        Parent searchedParent= Parent.searchParent(parentsList,sc);
-
-        if(searchedParent!=null){
-            System.out.println("Success");
-            String[] name=getChildInfo(sc);
-            String childrenFName = name[0];
-            String childrenLName = name[1];
-            Entity status=Parent.childExist(childrenFName,childrenLName,searchedParent.getChildrensList());
-
-            if(status==null){
-                searchedParent.addChildren(childrenFName,childrenLName);
-            }else{
-                System.out.println("Entered Parent already exists");
-            }
-            System.out.println("Operation Successful");
-        }else{
-            System.out.println("Cannot find Parent");
-        }
-    }
 
     public static String[] getChildInfo(Scanner sc){
         String[] name=new String[2];
-        name[0]= Utility.inputString("First Name of Children", sc).toLowerCase();
-        name[1] = Utility.inputString("Last Name of Children", sc).toLowerCase();
+        name[0]= Utility.inputString("First Name of Children", sc);
+        name[1] = Utility.inputString("Last Name of Children", sc);
         return name;
     }
 
-    public void addChildren(String fName,String lName){
-        if(listOfChildrens ==null){
-            listOfChildrens =new ArrayList<Child>();
-
-        }
-        listOfChildrens.add(new Child(fName,lName));
-    }
-
-    public static Entity childExist(String firstName, String lastName, ArrayList<Child> listOfChildrens){
-        if(listOfChildrens!=null){
-            Child tempChild1 = listOfChildrens.stream().filter(fName -> fName.getFName().toLowerCase().equals(firstName)).findAny().orElse(null);
-            Child tempChild2= listOfChildrens.stream().filter(LName -> LName.getLName().toLowerCase().equals(lastName)).findAny().orElse(null);
-
-            if(tempChild1==null){
-                return null;
-            }
-            if(tempChild1.equals(tempChild2)){
-                return tempChild1;
-            }
-
-            return null;
-
-        }
-        return null;
-
-    }
 
 
-
-
-
-    public static void updateParent(Parent status,String[] listOfUpdatableParents,Scanner sc){
-        Utility.listOfSelection("What kind of update you want to do?", listOfUpdatableParents);
-        String selectedUpdate = listOfUpdatableParents[Utility.getSelection(sc, listOfUpdatableParents.length)];
-
-        if (selectedUpdate.equals("FirstName")) {
-            String newFName = Utility.inputString("Updated First Name", sc);
-            status.setFName(newFName);
-        }
-
-        if (selectedUpdate.equals("LastName")) {
-            String newFName = Utility.inputString("Updated Last Name", sc);
-            status.setLName(newFName);
-        }
-
-        if (selectedUpdate.equals("Address")) {
-            Address newAddress = Parent.addAddressInfo(sc);
-            status.setAddress(newAddress);
-        }
-    }
-
-    public static void updateChild(Entity childExist, String[] listOfUpdatableChildren, Scanner sc){
-
-        Utility.listOfSelection("What kind of update you want to do?", listOfUpdatableChildren);
-        String update = listOfUpdatableChildren[Utility.getSelection(sc, listOfUpdatableChildren.length)];
-
-        if (update.equals("FirstName")) {
-            String newFName = Utility.inputString("Updated First Name", sc);
-            childExist.setFName(newFName);
-        } else {
-            String newLName = Utility.inputString("Updated Last Name", sc);
-            childExist.setLName(newLName);
-        }
-    }
-
+    //Getters and Setters
     public Address getAddress() {
         return address;
     }
     public void setAddress(Address address) {
         this.address = address;
     }
-    public ArrayList<Child> getChildrensList() {
-        return listOfChildrens;
+    public ArrayList<Child> getChildrenList() {
+        return listOfChildren;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    public static boolean updateChild(Entity childExist, String[] listOfUpdatableChildren, Scanner sc, Parent parent){
+//
+//        Utility.listOfSelection("What kind of update you want to do?", listOfUpdatableChildren);
+//        String update = listOfUpdatableChildren[Utility.getSelection(sc, listOfUpdatableChildren.length)];
+//
+//        if (update.equals("FirstName")) {
+//            String newFName = Utility.inputString("Updated First Name", sc);
+//            String[] checkChild={newFName,childExist.getLName()};
+//            Entity check=Parent.childExist(checkChild,parent.getChildrenList());
+//            if(check==null){
+//                childExist.setFName(newFName);
+//                return true;
+//            }
+//
+//        } else {
+//            String newLName = Utility.inputString("Updated Last Name", sc);
+//            String [] checkName={childExist.getFName(),newLName};
+//            Entity check=Parent.childExist(checkName,parent.getChildrenList());
+//            if(check==null){
+//                childExist.setLName(newLName);
+//                return true;
+//            }
+//        }
+//
+//        parent.getChildrenList().remove(childExist);
+//        return false;
+//
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    public static boolean updateParent(Parent parent,String[] listOfUpdatableParents,ListOfParents parentsList,Scanner sc){
+//        Utility.listOfSelection("What kind of update you want to do?", listOfUpdatableParents);
+//        String selectedUpdate = listOfUpdatableParents[Utility.getSelection(sc, listOfUpdatableParents.length)];
+//
+//        if (selectedUpdate.equals("FirstName")) {
+//            String newFName = Utility.inputString("Updated First Name", sc);
+//            return updateFirstName(newFName,parent,parentsList);
+//        }
+//
+//        if (selectedUpdate.equals("LastName")) {
+//            String newLName = Utility.inputString("Updated Last Name", sc);
+//            return updateLastName(newLName,parent,parentsList);
+//        }
+//
+//        return false;
+//
+//    }
+
+
+
+
+
+
+
+
+
+//    public static boolean updateParent(Parent parent,String[] listOfUpdatableParents,ListOfParents parentsList,Scanner sc){
+//        Utility.listOfSelection("What kind of update you want to do?", listOfUpdatableParents);
+//        String selectedUpdate = listOfUpdatableParents[Utility.getSelection(sc, listOfUpdatableParents.length)];
+//
+//        if (selectedUpdate.equals("FirstName")) {
+//            String newFName = Utility.inputString("Updated First Name", sc);
+//            String [] parentName={newFName,parent.getLName()};
+//            Parent check=Parent.searchParent(parentName,parentsList);
+//            if(check==null) {parent.setFName(newFName); return true;}
+//        }
+//
+//        if (selectedUpdate.equals("LastName")) {
+//            String newLName = Utility.inputString("Updated Last Name", sc);
+//            String [] parentName={parent.getFName(),newLName};
+//            Parent check=Parent.searchParent(parentName,parentsList);
+//            if(check==null) {parent.setFName(newLName); return true;}
+//        }
+//
+//        return false;
+//
+//    }
+
+
+
 
 
 
     @Override
     public String toString(){
-        if(listOfChildrens !=null && !listOfChildrens.isEmpty()){
+        if(listOfChildren !=null && !listOfChildren.isEmpty()){
             String children="";
-            for (Child child: listOfChildrens) {
+            for (Child child: listOfChildren) {
                 children+=child.toString();
             }
-            return String.format("{\n FirstName:%s,\n LastName:%s,\n Address:%s,\n Childrens: \n %s \n},",this.getFName(),this.getLName(),this.getAddress(),children);
+            return String.format("{\n FirstName:%s,\n LastName:%s,\n Address:%s,\n Children: \n %s \n},",this.getFName(),this.getLName(),this.getAddress(),children);
         }
         return String.format("{\n FirstName:%s,\n LastName:%s,\n Address:%s\n}",this.getFName(),this.getLName(),this.getAddress());
     }
@@ -211,7 +310,7 @@ public class Parent extends Entity implements Serializable {
         public String toString(){
 
             String space="          ";
-            return String.format(" { \n %s FirstName:%s \n %s LastName:%s \n }",
+            return String.format(" { \n %s FirstName:%s \n %s LastName:%s \n }\n",
                     space,this.getFName(),space,this.getLName());
 
         }
