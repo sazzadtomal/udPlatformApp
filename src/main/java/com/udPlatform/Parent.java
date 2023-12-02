@@ -34,23 +34,23 @@ public class Parent extends Entity implements Serializable {
 
     public static boolean updateParentName(String updateValue, String updateType, Parent parent, ListOfParents parentsList){
         if (updateType.equals("FirstName")) {
-            return updateFirstNameParent(updateValue,parent,parentsList);
+            return updateFirstNameParentValidity(updateValue,parent,parentsList);
         }
-        return updateLastNameParent(updateValue,parent,parentsList);
+        return updateLastNameParentValidity(updateValue,parent,parentsList);
     }
 
 
-    public static boolean updateFirstNameParent(String firstName, Entity entity, ListOfParents parentsList){
-        String [] parentName={firstName,entity.getLName()};
+    public static boolean updateFirstNameParentValidity(String firstName, Parent parent, ListOfParents parentsList){
+        String [] parentName={firstName,parent.getLName()};
         Parent check=Parent.searchParent(parentName,parentsList);
         if(check==null) {
-            entity.setFName(firstName);
+            parent.setFName(firstName);
             return true;
         }
         return false;
     }
 
-    public static boolean updateLastNameParent(String lastName, Entity parent, ListOfParents parentsList){
+    public static boolean updateLastNameParentValidity(String lastName, Parent parent, ListOfParents parentsList){
         String [] parentName={parent.getFName(),lastName};
         Parent check=Parent.searchParent(parentName,parentsList);
         if(check==null) {
@@ -90,7 +90,7 @@ public class Parent extends Entity implements Serializable {
             }
     }
 
-    public void addChild(String[] childName){
+    private void addChild(String[] childName){
         if(listOfChildren==null){
             listOfChildren = new ArrayList<>();
 
@@ -132,10 +132,10 @@ public class Parent extends Entity implements Serializable {
 
 
     //Getting data from the User
-    public static String[] getParentInfo(Scanner sc){
+    public static String[] getNameInfo(String type, Scanner sc){
         String[] name=new String[2];
-        name[0]= Utility.inputString("First Name of Parent", sc);
-        name[1] = Utility.inputString("Last Name of Parent", sc);
+        name[0]= Utility.inputString("First Name of "+type, sc);
+        name[1] = Utility.inputString("Last Name of "+type, sc);
         return name;
     }
 
@@ -150,13 +150,6 @@ public class Parent extends Entity implements Serializable {
         return new Address(street, city, state, zipCode);
     }
 
-
-    public static String[] getChildInfo(Scanner sc){
-        String[] name=new String[2];
-        name[0]= Utility.inputString("First Name of Children", sc);
-        name[1] = Utility.inputString("Last Name of Children", sc);
-        return name;
-    }
 
 
 

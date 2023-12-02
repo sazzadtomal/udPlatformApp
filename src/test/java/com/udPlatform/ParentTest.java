@@ -53,7 +53,7 @@ public class ParentTest extends TestCase {
         Parent.addParent(parentsList,parentName,null,new Address("street","city","state",1204));
         String[] childName={"ChildFirstName","ChildLastName"};
         Parent searchedParent=Parent.searchParent(parentName,parentsList);
-        searchedParent.addChild(childName);
+        Parent.createChild(searchedParent,childName);
         assertEquals(1,searchedParent.getChildrenList().size());
     }
 
@@ -64,8 +64,7 @@ public class ParentTest extends TestCase {
         Parent.addParent(parentsList,parentName,null,new Address("street","city","state",1204));
         String[] childName={"ChildFirstName","ChildLastName"};
         Parent searchedParent=Parent.searchParent(parentName,parentsList);
-        searchedParent.addChild(childName);
-
+        Parent.createChild(searchedParent,childName);
         assertNotNull(Parent.searchChild(childName,searchedParent.getChildrenList()));
     }
     @Test
@@ -76,7 +75,7 @@ public class ParentTest extends TestCase {
         String[] childName={"ChildFirstName","ChildLastName"};
         String[] alteredChildName={"NotChildFirstName","NotChildLastName"};
         Parent searchedParent=Parent.searchParent(parentName,parentsList);
-        searchedParent.addChild(childName);
+        Parent.createChild(searchedParent,childName);
         assertNull(Parent.searchChild(alteredChildName,searchedParent.getChildrenList()));
     }
 

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 public class FileOperation {
 
-    public static ListOfParents readFromFile() {
+    public static ListOfParents readFromFile(String path) {
         try {
-            File file=new File("src/main/java/com/udPlatform/database.txt");
+            File file=new File(path);
             if(file.exists() && file.length()!=0){
                 FileInputStream fileInputStream = new FileInputStream(file);
                 ObjectInputStream input = new ObjectInputStream(fileInputStream);
@@ -25,10 +25,10 @@ public class FileOperation {
 
     }
 
-    public static void saveToFile(ListOfParents parentsList){
+    public static void saveToFile(ListOfParents parentsList,String path){
 
         try{
-            FileOutputStream file=new FileOutputStream("src/main/java/com/udPlatform/database.txt");
+            FileOutputStream file=new FileOutputStream(path);
             ObjectOutputStream output=new ObjectOutputStream(file);
             output.writeObject(parentsList);
 

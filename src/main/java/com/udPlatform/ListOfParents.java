@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class ListOfParents implements Serializable {
 
 
-    ArrayList<Parent> list;
+    private ArrayList<Parent> list;
     public ListOfParents(ArrayList list) {
         this.list=list;
     }

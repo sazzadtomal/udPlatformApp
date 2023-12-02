@@ -15,7 +15,7 @@ public class FileOperationTest extends TestCase {
 
     @Test
     public void testReadFromFile() throws IOException {
-        assertTrue(FileOperation.readFromFile() instanceof ListOfParents);
+        assertTrue(FileOperation.readFromFile("src/main/java/com/udPlatform/database.txt") instanceof ListOfParents);
     }
 
     @Test
@@ -23,8 +23,8 @@ public class FileOperationTest extends TestCase {
         ListOfParents inputParentsList=new ListOfParents(new ArrayList<Parent>());
         String[] parentName={"FirstName","LastName"};
         Parent.addParent(inputParentsList,parentName,null,new Address("street","city","state",1204));
-        FileOperation.saveToFile(inputParentsList);
-        ListOfParents outputParentsList=FileOperation.readFromFile();
+        FileOperation.saveToFile(inputParentsList,"src/main/java/com/udPlatform/database.txt");
+        ListOfParents outputParentsList=FileOperation.readFromFile("src/main/java/com/udPlatform/database.txt");
         Parent inputParent=inputParentsList.getList().get(0);
         Parent outputParent=outputParentsList.getList().get(0);
         assertTrue(inputParent.getFName().equals(outputParent.getFName()) && inputParent.getLName().equals(outputParent.getLName()));

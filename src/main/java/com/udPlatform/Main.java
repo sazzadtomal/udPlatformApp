@@ -9,13 +9,9 @@ public class Main {
         String[] listOfEntity={"Parent","Child"};
         String[] listOfUpdatableParents={"FirstName","LastName","Address"};
         String[] listOfUpdatableChildren={"FirstName","LastName"};
-        ListOfParents parentsList;
-
+        String filePath="src/main/java/com/udPlatform/database.txt";
         System.out.println("\nWelcome! Let's get started!");
-        parentsList=FileOperation.readFromFile();
-
-
-
+        ListOfParents parentsList=FileOperation.readFromFile(filePath);
 
 
         while(true) {
@@ -25,7 +21,7 @@ public class Main {
 
             switch (selectedOperation){
                 case "Terminate": {
-                    FileOperation.saveToFile(parentsList);
+                    FileOperation.saveToFile(parentsList,filePath);
                     sc.close();
                     return;
                 }
@@ -42,7 +38,7 @@ public class Main {
 
 
 
-            String[] parentName=Parent.getParentInfo(sc);
+            String[] parentName=Parent.getNameInfo("Parent",sc);
             Parent status = Parent.searchParent(parentName,parentsList);
 
             switch (selectedOperation){
@@ -58,7 +54,7 @@ public class Main {
                                 System.out.println("Parent not found");
                                 continue;
                             }
-                            String[] childName=Parent.getChildInfo(sc);
+                            String[] childName=Parent.getNameInfo("Child",sc);
                             Parent.createChild(status,childName);
                         }
                     }
@@ -96,7 +92,7 @@ public class Main {
 
 
                         case "Child":{
-                            String[] childName=Parent.getChildInfo(sc);
+                            String[] childName=Parent.getNameInfo("Child",sc);
                             Entity childExist = Parent.searchChild(childName,status.getChildrenList());
                             if (childExist == null) {
                                 System.out.println("Cannot find Children to update");
@@ -125,7 +121,7 @@ public class Main {
                             }
 
                         case "Child":{
-                            String[] childName=Parent.getChildInfo(sc);
+                            String[] childName=Parent.getNameInfo("Child",sc);
                             Entity childExist = Parent.searchChild(childName,status.getChildrenList());
                             if (childExist == null) {
                                 System.out.println("Cannot find Children to Delete");
